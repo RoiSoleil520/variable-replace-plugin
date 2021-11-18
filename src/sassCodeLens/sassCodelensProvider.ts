@@ -8,6 +8,9 @@ function matchSassVariable(cssVariables: any, targetValue: string) {
 	for (const key in cssVariables) {
 		const targetLowerValue = targetValue.toLocaleLowerCase();
 		const cssLowerVariables = cssVariables[key].toLocaleLowerCase();
+		if (cssLowerVariables === targetLowerValue) {
+			return key;
+		}
 		if (targetLowerValue.includes(cssLowerVariables)) {
 			let targetLowerValueArr: any = targetLowerValue.split(' ');
 			for (const innerKey in targetLowerValueArr) {
