@@ -6,11 +6,21 @@ import getPath from '../utils/getPath';
 
 function matchSassVariable(cssVariables: any, targetValue: string) {
 	for (const key in cssVariables) {
-		if (
-			cssVariables[key].toLocaleLowerCase() ===
-			targetValue.toLocaleLowerCase()
-		) {
-			return key;
+		const targetLowerValue = targetValue.toLocaleLowerCase();
+		const cssLowerVariables = cssVariables[key].toLocaleLowerCase();
+		if (targetLowerValue.includes(cssLowerVariables)) {
+			let targetLowerValueArr: any = targetLowerValue.split(' ');
+			for (const innerKey in targetLowerValueArr) {
+				if (
+					targetLowerValueArr[innerKey].toLocaleLowerCase() ===
+					cssVariables[key].toLocaleLowerCase()
+				) {
+					return ` ${targetLowerValue.replace(
+						cssLowerVariables,
+						key
+					)}`;
+				}
+			}
 		}
 	}
 }
@@ -24,7 +34,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 		this._onDidChangeCodeLenses.event;
 
 	constructor() {
-		this.regex = /.:[\s]*([^:\s;]+)/g;
+		this.regex = /.:[\s]*([^:;]+)/g;
 
 		vscode.workspace.onDidChangeConfiguration((_) => {
 			this._onDidChangeCodeLenses.fire();
@@ -56,7 +66,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 				const position = new vscode.Position(line.lineNumber, indexOf);
 				const range = document.getWordRangeAtPosition(
 					position,
-					new RegExp(/([^:\s;]+)/g)
+					new RegExp(/([^:;]+)/g)
 				);
 				if (range) {
 					this.codeLenses.push(
