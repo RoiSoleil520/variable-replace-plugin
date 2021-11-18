@@ -2,7 +2,7 @@
   "name": "variable-replace-plugin",
   "displayName": "variable-replace-plugin",
   "description": "variable replace",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "publisher": "zhaowei",
   "engines": {
